@@ -43,7 +43,7 @@
 
         public TickerDefinitionParameters()
         {
-            Currency = "USD";
+            //Currency = "USD";
             IgnoreNullDates = true;
         }
     }

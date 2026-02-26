@@ -20,7 +20,7 @@ namespace Restless.Tiingo.Client
         /// </summary>
         /// <param name="ticker">The ticker</param>
         /// <returns></returns>
-        public async Task<TickerMetaData> GetMetaDataAsync(string ticker)
+        public async Task<Tuple<TickerMetaData, string>> GetMetaDataAsync(string ticker)
         {
             ValidateParms(ticker);
 
@@ -29,7 +29,7 @@ namespace Restless.Tiingo.Client
                 .AddFormat(Values.JsonFormat);
 
             string json = await GetRawJsonAsync(builder.Url);
-            return JsonSerializer.Deserialize<TickerMetaData>(json);
+            return Tuple.Create(JsonSerializer.Deserialize<TickerMetaData>(json), json);
         }
 
         /// <summary>
@@ -37,7 +37,8 @@ namespace Restless.Tiingo.Client
         /// </summary>
         /// <param name="parms">The operation options</param>
         /// <returns>A <see cref="TickerDataPointCollection"/></returns>
-        public async Task<TickerDataPointCollection> GetDataPointsAsync(TickerParameters parms)
+        /// <returns>Raw Json string"/></returns>
+        public async Task<Tuple<TickerDataPointCollection, string>> GetDataPointsAsync(TickerParameters parms)
         {
             ValidateParms(parms, parms.Ticker);
 
@@ -50,7 +51,7 @@ namespace Restless.Tiingo.Client
                 .AddValue(Values.SortParm, parms.GetSortParameter());
 
             string json = await GetRawJsonAsync(builder.Url);
-            return JsonSerializer.Deserialize<TickerDataPointCollection>(json);
+            return Tuple.Create(JsonSerializer.Deserialize<TickerDataPointCollection>(json), json);
         }
     }
 }

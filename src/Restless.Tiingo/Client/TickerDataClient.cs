@@ -20,7 +20,8 @@ namespace Restless.Tiingo.Client
     public class TickerDataClient : BaseClient
     {
         private const string TickerZipUrl = "https://apimedia.tiingo.com/docs/tiingo/daily/supported_tickers.zip";
-        private const string TickerTempFile = "TICKERS-DB6E92E3-59AC-40DD-8A06-279950AC7CB9";
+        //private const string TickerTempFile = "TICKERS-DB6E92E3-59AC-40DD-8A06-279950AC7CB9";
+        private const string TickerTempFile = "supported_tickers.zip";
         private const int MaxTempFileAgeMinutes = 60 * 24;
 
         internal TickerDataClient(IHttpClientWrapper client, string apiToken) : base(client, apiToken)
@@ -88,7 +89,7 @@ namespace Restless.Tiingo.Client
                             {
                                 result.Add(def);
                                 if (result.Count == parms.Limit)
-                                { 
+                                {
                                     break;
                                 }
                             }
@@ -104,11 +105,14 @@ namespace Restless.Tiingo.Client
 
             if (File.Exists(fileName))
             {
-                DateTime date = File.GetLastWriteTime(fileName);
-                if ((DateTime.Now - date).Minutes < MaxTempFileAgeMinutes)
-                {
-                    return File.ReadAllBytes(fileName);
-                }
+                return File.ReadAllBytes(fileName);
+                /*
+                                DateTime date = File.GetLastWriteTime(fileName);
+                                if ((DateTime.Now - date).Minutes < MaxTempFileAgeMinutes)
+                                {
+                                    return File.ReadAllBytes(fileName);
+                                }
+                */
             }
 
             byte[] bytes = await GetRawByteArrayAsync(TickerZipUrl);
@@ -118,7 +122,8 @@ namespace Restless.Tiingo.Client
 
         private string GetCacheFileName()
         {
-            return Path.Combine(Path.GetTempPath(), TickerTempFile);
+            //return Path.Combine(Path.GetTempPath(), TickerTempFile);
+            return Path.Combine("C:\\Users\\Internet\\Downloads", TickerTempFile);
         }
     }
 }
